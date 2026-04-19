@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fraud Detection System</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .card {
+            background: white;
+            color: black;
+            padding: 30px;
+            border-radius: 15px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1e3c72;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .fraud {
+            color: red;
+        }
+
+        .safe {
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>💳 Fraud Detection</h2>
+    <p>Check if a transaction is fraudulent</p>
+
+    <input type="number" id="amount" placeholder="Enter Amount">
+    <input type="number" id="time" placeholder="Enter Time">
+
+    <button onclick="checkFraud()">Check Fraud</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+function checkFraud() {
+    let amount = document.getElementById("amount").value;
+    let time = document.getElementById("time").value;
+
+    fetch(`http://localhost:8080/api/check?amount=${amount}&time=${time}`)
+    .then(res => res.json())
+    .then(data => {
+        if (data.fraud === 1) {
+            document.getElementById("result").innerHTML =
+                `<span class="fraud">🚨 Fraud Detected</span>`;
+        } else {
+            document.getElementById("result").innerHTML =
+                `<span class="safe">✅ Safe Transaction</span>`;
+        }
+    })
+    .catch(() => {
+        document.getElementById("result").innerHTML = "⚠️ Backend not reachable";
+    });
+}
+</script>
+
+</body>
+</html>
